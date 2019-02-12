@@ -22,6 +22,7 @@ Module.register('MMM-Carousel', {
         ],
         showPageIndicators: true,
         showPageControls: true,
+        showPageTitles: false,
         // MMM-KeyBindings mapping.
         keyBindings: {
             enabled: true
@@ -160,6 +161,7 @@ Module.register('MMM-Carousel', {
         modules.currentIndex = -1;
         modules.showPageIndicators = this.config.showPageIndicators;
         modules.showPageControls = this.config.showPageControls;
+        modules.showPageTitles = this.config.showPageTitles;
         modules.slideTransitionSpeed = this.config.slideTransitionSpeed;
         this.moduleTransition.call(modules);
 
@@ -275,7 +277,7 @@ Module.register('MMM-Carousel', {
         }
 
         // Update the DOM if we're using it.
-        if ((this.slides !== undefined) && (this.showPageIndicators || this.showPageControls)) {
+        if ((this.slides !== undefined) && (this.showPageIndicators || this.showPageControls || this.showPageTitles)) {
             var slider = document.getElementById("slider_" + this.currentIndex);
             slider.checked = true;
             var label;
@@ -305,6 +307,11 @@ Module.register('MMM-Carousel', {
                     // console.log("Trying to enable button sliderPrevBtn_" + (this.currentIndex-1));
                     document.getElementById("sliderPrevBtn_" + (this.currentIndex - 1)).classList.add('MMMCarouselAvailable');
                 }
+            }
+
+            if (this.showPageTitles) {
+                var hdr = document.getElementById('MMMCarouselPageTitle');
+                hdr.textContent = Object.keys(this.slides)[this.currentIndex];
             }
         }
     },
@@ -343,7 +350,9 @@ Module.register('MMM-Carousel', {
             };
         }
 
-        if (this.config.mode === "slides" && (this.config.showPageIndicators || this.config.showPageControls)) {
+        if (this.config.mode === "slides" && (this.config.showPageIndicators ||
+                                              this.config.showPageControls ||
+                                              this.config.showPageTitles)) {
 
             var div = document.createElement("div");
             div.className = "MMMCarouselContainer";
@@ -399,6 +408,19 @@ Module.register('MMM-Carousel', {
 
                 div.appendChild(nextWrapper);
                 div.appendChild(previousWrapper);
+            }
+
+            if (this.config.showPageTitles) {
+                var hdr = document.createElement('header');
+                hdr.setAttribute("id", "MMMCarouselPageTitle");
+                hdr.classList.add('module-header');
+                if (this.config.showPageTitles == 'top') {
+                    var top_bar = document.getElementsByClassName('region top bar')[0];
+                    top_bar.insertBefore(hdr, top_bar.firstChild);
+                } else if (this.config.showPageTitles == 'bottom' ) {
+                    hdr.style.cssText = 'margin: -10px;';
+                    div.insertBefore(hdr, div.firstChild);
+                }
             }
             return div;
         }

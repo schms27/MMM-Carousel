@@ -1,6 +1,7 @@
 ## [0.2.7] - Changed CarouselId lookup for advanced use cases
 
 * Changed CarouselId match to an indexOf match to allow different configurations such as "all|2" to show on two different slide configurations, one with "all" and one with "2".
+* Added Page Titles -- new config option `showPageTitles` is detailed in README.
 
 ## <a name="0_2_6"></a>[0.2.6] - Named Slide Support & Update for new MMM-KeyBindings
 

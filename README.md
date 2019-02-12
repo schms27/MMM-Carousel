@@ -117,7 +117,7 @@ The following properties can be configured:
         			<td><code>slides</code></td>
         			<td>See Examples below. The slides will be rotated as a complete set using the <code>transitionInterval</code> setting.  Ingnored modules (<code>ignoreModules</code>) will be diplayed on all slides.
         				<br> <br> This value is <b>OPTIONAL</b>
-        				<br><b>Possible values:</b> <code>array of String/Object array</code> <a href="#advanced-slides">(see below)</a>
+        				<br><b>Possible values:</b> <code>array or Object of String/Object arrays</code> <a href="#advanced-slides">(see below)</a>
                         <br><b>Default value:</b> <code>[[]]</code>
         			</td>
         		</tr>
@@ -129,6 +129,11 @@ The following properties can be configured:
         <tr>
             <td><code>showPageControls</code></td>
             <td>A <code>boolean true or false</code> to show or hide the next and previous page buttons. Buttons will only appear when hovered near or over. They can be clicked when not visible. Default is <code>true</code>.
+            </td>
+        </tr>
+        <tr>
+            <td><code>showPageTitles</code></td>
+            <td>Valid options: <code>false</code> (default), <code>'top'</code>, or <code>'bottom'</code> to show the page titles at the top or bottom. The page titles are derived from the <a href="#advanced-slides">Slides config</a> provided. If you want to use page titles, it is recommended you use an Object with named slides in your config; if you use an array, you will just see the slide number ("0", "1", etc.).
             </td>
         </tr>
 	<tr>
@@ -196,7 +201,7 @@ var config = {
                 ignoreModules: ['clock', 'alert'],
                 mode: 'slides',
                 slides: {
-                    main: ['calendar', 'compliments', 'currentweather'],
+                    "Main": ['calendar', 'compliments', 'currentweather'],
                     "Slide 2": ['weatherforecast', 'MMM-Trello', 'planetrise', 'newsfeed'],
                     "Slide 3": ['MMM-fitbit']
                 }
@@ -239,12 +244,13 @@ var config = {
 ```
 
 #### <a name="advanced-slides"></a>Example - Advanced Slides Carousel
-The `slides` parameter can accept an array of both String or an Object of the form: `{ name: "ModuleName", position: "top_left", classes: "CSSclassName", carouselId: "1" }`. 
-Passing a config similar to the following shows a large clock on the first slide and then a small clock and additional modules on the second.  `carouselId` is an optional parameter which can be used to set a unique identifier for multiple instances of a module. To use, set the same parameter in the module's `config` section.
+The `slides` parameter can accept an array or Object of both String or an Object of the form: `{ name: "ModuleName", position: "top_left", classes: "CSSclassName", carouselId: "1" }`. 
+Passing a config similar to the following shows a large clock on the first slide and then a small clock and additional modules on the second. 
+
 ```
     mode: 'slides',
     slides: {
-        Main: [   {name:'clock', classes:'zoom200', position:"middle_center", carouselId: "1"} ],
+        "Main": [   {name:'clock', classes:'zoom200', position:"middle_center", carouselId: "1"} ],
         "Slide 2: [   {name:'clock', classes:'', position:"top_left", carouselId: "2"}, 
             {name:'calendar', position:'top_left'}, 
             'MMM-WunderGround', 
@@ -253,7 +259,12 @@ Passing a config similar to the following shows a large clock on the first slide
     }
 ```
 
-**Note:** The `zoomXXX` classes are available to change the scaling of a module. Using the methods above, you can pass `classes:'zoom%%%'` to scale a single module to a larger or smaller size.  Supported zooms are 070%, 080%, 090%, 125%, 150%, 175%, and 200%. Pass `classes:''` for 100%.  Edit your `'css/custom.css'` file to add additional classes.
+**Notes:** 
+
+1) The `zoomXXX` classes are available to change the scaling of a module. Using the methods above, you can pass `classes:'zoom%%%'` to scale a single module to a larger or smaller size.  Supported zooms are 070%, 080%, 090%, 125%, 150%, 175%, and 200%. Pass `classes:''` for 100%.  Edit your `'css/custom.css'` file to add additional classes.
+2)  `carouselId` is an optional parameter which can be used to set a unique identifier for multiple instances of a module. To use, set the same parameter inside the module's `config` section. A slide will show all of the modules with the same name/CarouselID pair, but will only match the first combo it finds <br>
+**Example**: You have 2 clock modules with id's "digital" and "analog" and want to show both on the first slide and one on other slides and you put  `"Main": [{name:'clock', carouselId: "digital"},{name:'clock', carouselId: "analog"}]`. This won't work, only "digital" will be shown because it's the first match). 
+<br>For multiple groups on different slides, you can use partial matches. In the clock example, setting the id's to `"main|digital"` and `"main|analog"` in the clock config's, you can use `carouselId: 'main'` in the first slide, and `carouselId: 'digital'` or  `carouselId: 'analog'` in other slides to match what you need. <a href="https://github.com/shbatm/MMM-Carousel/issues/19">See this issue</a> for more explaination.
 
 ## Navigation from other modules
 

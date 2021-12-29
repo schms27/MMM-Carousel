@@ -110,12 +110,13 @@ Module.register('MMM-Carousel', {
         }
 
         if (this.keyHandler && this.keyHandler.validate(notification, payload)) { return; }
+        
 
-        if (notification === "CAROUSEL_NEXT") {
+        if (notification === "CAROUSEL_NEXT" || notification === "PAGE_INCREMENT") {
             this.manualTransition(undefined, 1);
             this.restartTimer();
         }
-        if (notification === "CAROUSEL_PREVIOUS") {
+        if (notification === "CAROUSEL_PREVIOUS" || notification === "PAGE_DECREMENT") {
             this.manualTransition(undefined, -1);
             this.restartTimer();
         }
